@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Alquiler de Vehículos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Gestor de Alquiler</h1>
+
+<h2>Registrar Vehículo</h2>
+<input id="marca" placeholder="Marca">
+<input id="modelo" placeholder="Modelo">
+<input id="anio" placeholder="Año">
+<input id="categoria" placeholder="Categoría">
+<button onclick="guardar()">Guardar</button>
+
+<ul id="lista"></ul>
+
+<h2>Registrar Cliente</h2>
+<input id="nombre" placeholder="Nombre">
+<input id="telefono" placeholder="Teléfono">
+<input id="licencia" placeholder="Licencia">
+<button onclick="guardarCliente()">Guardar Cliente</button>
+
+<ul id="listaClientes"></ul>
+
+<h2>Crear Reserva</h2>
+<input id="vehiculo_id" placeholder="ID Vehículo">
+<input id="cliente_id" placeholder="ID Cliente">
+<input type="date" id="fecha_inicio">
+<input type="date" id="fecha_fin">
+<button onclick="crearReserva()">Reservar</button>
+
+<ul id="listaReservas"></ul>
+
+<script src="app.js"></script>
+
+</body>
+</html>
