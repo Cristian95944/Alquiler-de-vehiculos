@@ -8,6 +8,7 @@ $cliente_id = $data['cliente_id'];
 $fecha_inicio = $data['fecha_inicio'];
 $fecha_fin = $data['fecha_fin'];
 
+// verificar disponibilidad
 $check = $conexion->query("SELECT estado FROM vehiculos WHERE id=$vehiculo_id");
 $fila = $check->fetch_assoc();
 
@@ -16,11 +17,13 @@ if ($fila['estado'] != 'DISPONIBLE') {
     exit;
 }
 
+// insertar reserva
 $sql = "INSERT INTO reservas (vehiculo_id, cliente_id, fecha_inicio, fecha_fin)
         VALUES ($vehiculo_id, $cliente_id, '$fecha_inicio', '$fecha_fin')";
 
 $conexion->query($sql);
 
+// actualizar estado
 $conexion->query("UPDATE vehiculos SET estado='ALQUILADO' WHERE id=$vehiculo_id");
 
 echo "ok";

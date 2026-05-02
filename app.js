@@ -3,10 +3,10 @@ const URL = "http://localhost/Alquiler-de-vehiculos/";
 // VEHICULOS
 function guardar() {
     const data = {
-        marca: marca.value,
-        modelo: modelo.value,
-        anio: anio.value,
-        categoria: categoria.value
+        marca: document.getElementById("marca").value,
+        modelo: document.getElementById("modelo").value,
+        anio: document.getElementById("anio").value,
+        categoria: document.getElementById("categoria").value
     };
 
     fetch(URL + "vehiculos.php", {
@@ -19,6 +19,7 @@ function listar() {
     fetch(URL + "listarVehiculos.php")
         .then(res => res.json())
         .then(data => {
+            const lista = document.getElementById("lista");
             lista.innerHTML = "";
             data.forEach(v => {
                 lista.innerHTML += `<li>${v.id} - ${v.marca} ${v.modelo} (${v.estado})</li>`;
@@ -29,9 +30,9 @@ function listar() {
 // CLIENTES
 function guardarCliente() {
     const data = {
-        nombre: nombre.value,
-        telefono: telefono.value,
-        licencia: licencia.value
+        nombre: document.getElementById("nombre").value,
+        telefono: document.getElementById("telefono").value,
+        licencia: document.getElementById("licencia").value
     };
 
     fetch(URL + "clientes.php", {
@@ -44,9 +45,10 @@ function listarClientes() {
     fetch(URL + "listarClientes.php")
         .then(res => res.json())
         .then(data => {
-            listaClientes.innerHTML = "";
+            const lista = document.getElementById("listaClientes");
+            lista.innerHTML = "";
             data.forEach(c => {
-                listaClientes.innerHTML += `<li>${c.id} - ${c.nombre}</li>`;
+                lista.innerHTML += `<li>${c.id} - ${c.nombre}</li>`;
             });
         });
 }
@@ -54,10 +56,10 @@ function listarClientes() {
 // RESERVAS
 function crearReserva() {
     const data = {
-        vehiculo_id: vehiculo_id.value,
-        cliente_id: cliente_id.value,
-        fecha_inicio: fecha_inicio.value,
-        fecha_fin: fecha_fin.value
+        vehiculo_id: document.getElementById("vehiculo_id").value,
+        cliente_id: document.getElementById("cliente_id").value,
+        fecha_inicio: document.getElementById("fecha_inicio").value,
+        fecha_fin: document.getElementById("fecha_fin").value
     };
 
     fetch(URL + "reservas.php", {
@@ -70,9 +72,10 @@ function listarReservas() {
     fetch(URL + "listarReservas.php")
         .then(res => res.json())
         .then(data => {
-            listaReservas.innerHTML = "";
+            const lista = document.getElementById("listaReservas");
+            lista.innerHTML = "";
             data.forEach(r => {
-                listaReservas.innerHTML += `<li>${r.nombre} - ${r.marca} ${r.modelo}</li>`;
+                lista.innerHTML += `<li>${r.nombre} - ${r.marca} ${r.modelo}</li>`;
             });
         });
 }

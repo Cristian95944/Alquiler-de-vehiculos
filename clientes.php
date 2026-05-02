@@ -10,9 +10,5 @@ $licencia = $data['licencia'];
 $sql = "INSERT INTO clientes (nombre, telefono, licencia)
         VALUES ('$nombre','$telefono','$licencia')";
 
-if ($conexion->query($sql)) {
-    echo "ok";
-} else {
-    echo "error";
-}
+echo $conexion->query($sql) ? "ok" : "error";
 ?>

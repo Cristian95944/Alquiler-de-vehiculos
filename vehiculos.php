@@ -11,9 +11,5 @@ $categoria = $data['categoria'];
 $sql = "INSERT INTO vehiculos (marca, modelo, anio, categoria, estado)
         VALUES ('$marca','$modelo','$anio','$categoria','DISPONIBLE')";
 
-if ($conexion->query($sql)) {
-    echo "ok";
-} else {
-    echo "error";
-}
+echo $conexion->query($sql) ? "ok" : "error";
 ?>
