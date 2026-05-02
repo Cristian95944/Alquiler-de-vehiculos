@@ -1,17 +1,114 @@
+:root {
+    --primary: #2563eb;
+    --secondary: #64748b;
+    --success: #22c55e;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+}
+
 body {
-    font-family: Arial;
-    margin: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: var(--primary);
+    color: white;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.container {
+    max-width: 1100px;
+    margin: 2rem auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    padding: 0 1rem;
+}
+
+.card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+h2 {
+    margin-top: 0;
+    font-size: 1.25rem;
+    border-bottom: 2px solid var(--bg);
+    padding-bottom: 0.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group.row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
 }
 
 input {
-    display: block;
-    margin: 5px 0;
-    padding: 5px;
+    padding: 0.6rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+input:focus {
+    outline: 2px solid var(--primary);
+    border-color: transparent;
 }
 
 button {
-    padding: 6px;
-    background: blue;
-    color: white;
+    cursor: pointer;
     border: none;
+    border-radius: 6px;
+    padding: 0.7rem 1.2rem;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.btn-save { background: var(--primary); color: white; }
+.btn-save:hover { background: #1d4ed8; }
+
+.btn-reserve { background: var(--success); color: white; }
+.btn-reserve:hover { background: #16a34a; }
+
+/* Listas estéticas */
+.data-list {
+    list-style: none;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.data-list li {
+    background: var(--bg);
+    margin-bottom: 0.5rem;
+    padding: 0.6rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    border-left: 4px solid var(--primary);
+}
+
+.grid-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 10px;
 }
