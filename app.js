@@ -1,64 +1,20 @@
-const URL = "http://localhost/Alquiler-de-vehiculos/";
-
-// REFERENCIAS DOM (🔥 ESTO ES LO QUE TE FALTABA)
-const marca = document.getElementById("marca");
-const modelo = document.getElementById("modelo");
-const anio = document.getElementById("anio");
-const categoria = document.getElementById("categoria");
-const lista = document.getElementById("lista");
-
-const nombre = document.getElementById("nombre");
-const telefono = document.getElementById("telefono");
-const licencia = document.getElementById("licencia");
-const listaClientes = document.getElementById("listaClientes");
-
-const vehiculo_id = document.getElementById("vehiculo_id");
-const cliente_id = document.getElementById("cliente_id");
-const fecha_inicio = document.getElementById("fecha_inicio");
-const fecha_fin = document.getElementById("fecha_fin");
-const listaReservas = document.getElementById("listaReservas");
-
-
-// VEHICULOS
-function guardar() {
-    const data = {
-        marca: marca.value,
-        modelo: modelo.value,
-        anio: anio.value,
-        categoria: categoria.value
-    };
-
-    fetch(URL + "vehiculos.php", {
-        method: "POST",
-        body: JSON.stringify(data)
-    }).then(() => listar());
-}
-
 function listar() {
     fetch(URL + "listarVehiculos.php")
         .then(res => res.json())
         .then(data => {
             lista.innerHTML = "";
-            data.forEach(v => {
-                lista.innerHTML += `<li>${v.id} - ${v.marca} ${v.modelo} (${v.estado})</li>`;
+            const disponibles = data.filter(v => v.estado === "DISPONIBLE");
+            
+            if (disponibles.length === 0) {
+                lista.innerHTML = "<li>No hay vehículos disponibles</li>";
+                return;
+            }
+
+            disponibles.forEach(v => {
+                lista.innerHTML += `<li><strong>[ID: ${v.id}]</strong> - ${v.marca} ${v.modelo} (${v.categoria})</li>`;
             });
         })
-        .catch(error => console.error("Error vehiculos:", error));
-}
-
-
-// CLIENTES
-function guardarCliente() {
-    const data = {
-        nombre: nombre.value,
-        telefono: telefono.value,
-        licencia: licencia.value
-    };
-
-    fetch(URL + "clientes.php", {
-        method: "POST",
-        body: JSON.stringify(data)
-    }).then(() => listarClientes());
+        .catch(error => console.error("Error vehículos:", error));
 }
 
 function listarClientes() {
@@ -66,15 +22,17 @@ function listarClientes() {
         .then(res => res.json())
         .then(data => {
             listaClientes.innerHTML = "";
+            if (data.length === 0) {
+                listaClientes.innerHTML = "<li>No hay clientes registrados</li>";
+                return;
+            }
             data.forEach(c => {
-                listaClientes.innerHTML += `<li>${c.id} - ${c.nombre}</li>`;
+                listaClientes.innerHTML += `<li><strong>[ID: ${c.id}]</strong> - ${c.nombre} (Lic: ${c.licencia})</li>`;
             });
         })
         .catch(error => console.error("Error clientes:", error));
 }
 
-
-// RESERVAS
 function crearReserva() {
     const data = {
         vehiculo_id: vehiculo_id.value,
@@ -85,8 +43,25 @@ function crearReserva() {
 
     fetch(URL + "reservas.php", {
         method: "POST",
-        body: JSON.stringify(data)
-    }).then(() => listarReservas());
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+    })
+    .then(res => res.text())
+    .then(txt => {
+        if (txt.trim() === "ok") {
+            listar();
+            listarClientes();
+            listarReservas();
+            
+            vehiculo_id.value = ""; 
+            cliente_id.value = ""; 
+            fecha_inicio.value = ""; 
+            fecha_fin.value = "";
+        } else {
+            alert("Reserva rechazada: " + txt);
+        }
+    })
+    .catch(error => console.error("Error reservas:", error));
 }
 
 function listarReservas() {
@@ -94,15 +69,19 @@ function listarReservas() {
         .then(res => res.json())
         .then(data => {
             listaReservas.innerHTML = "";
+            if (data.length === 0) {
+                listaReservas.innerHTML = "<li>No hay reservas hechas aún</li>";
+                return;
+            }
             data.forEach(r => {
-                listaReservas.innerHTML += `<li>${r.nombre} - ${r.marca} ${r.modelo}</li>`;
+                listaReservas.innerHTML += `
+                    <li>
+                        <strong>Reserva #${r.id}</strong><br>
+                         Cliente: ${r.nombre}<br>
+                         Vehículo: ${r.marca} ${r.modelo}<br>
+                         Período: ${r.fecha_inicio} hasta ${r.fecha_fin}
+                    </li>`;
             });
         })
         .catch(error => console.error("Error reservas:", error));
 }
-
-
-// INICIAL
-listar();
-listarClientes();
-listarReservas();
