@@ -3,12 +3,23 @@ include 'conexion.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 
+if (!$data) {
+    echo "No se recibieron datos válidos";
+    exit;
+}
+
 $nombre = $data['nombre'];
 $telefono = $data['telefono'];
 $licencia = $data['licencia'];
 
-$sql = "INSERT INTO clientes (nombre, telefono, licencia)
-        VALUES ('$nombre','$telefono','$licencia')";
+$stmt = $conexion->prepare("INSERT INTO clientes (nombre, telefono, licencia) VALUES (?, ?, ?)");
+$stmt->bind_param("sss", $nombre, $telefono, $licencia);
 
-echo $conexion->query($sql) ? "ok" : "error";
+if ($stmt->execute()) {
+    echo "ok";
+} else {
+    echo "error";
+}
+
+$stmt->close();
 ?>

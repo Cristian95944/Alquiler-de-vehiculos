@@ -3,13 +3,25 @@ include 'conexion.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 
+if (!$data) {
+    echo "No se recibieron datos válidos";
+    exit;
+}
+
 $marca = $data['marca'];
 $modelo = $data['modelo'];
-$anio = $data['anio'];
+$anio = (int)$data['anio'];
 $categoria = $data['categoria'];
+$estado = 'DISPONIBLE';
 
-$sql = "INSERT INTO vehiculos (marca, modelo, anio, categoria, estado)
-        VALUES ('$marca','$modelo','$anio','$categoria','DISPONIBLE')";
+$stmt = $conexion->prepare("INSERT INTO vehiculos (marca, modelo, anio, categoria, estado) VALUES (?, ?, ?, ?, ?)");
+$stmt->bind_param("ssiss", $marca, $modelo, $anio, $categoria, $estado);
 
-echo $conexion->query($sql) ? "ok" : "error";
+if ($stmt->execute()) {
+    echo "ok";
+} else {
+    echo "error";
+}
+
+$stmt->close();
 ?>

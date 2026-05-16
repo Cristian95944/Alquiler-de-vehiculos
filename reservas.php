@@ -3,28 +3,42 @@ include 'conexion.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-$vehiculo_id = $data['vehiculo_id'];
-$cliente_id = $data['cliente_id'];
-$fecha_inicio = $data['fecha_inicio'];
-$fecha_fin = $data['fecha_fin'];
-
-// verificar disponibilidad
-$check = $conexion->query("SELECT estado FROM vehiculos WHERE id=$vehiculo_id");
-$fila = $check->fetch_assoc();
-
-if ($fila['estado'] != 'DISPONIBLE') {
-    echo "no disponible";
+if (!$data) {
+    echo "No se recibieron datos válidos";
     exit;
 }
 
-// insertar reserva
-$sql = "INSERT INTO reservas (vehiculo_id, cliente_id, fecha_inicio, fecha_fin)
-        VALUES ($vehiculo_id, $cliente_id, '$fecha_inicio', '$fecha_fin')";
+$vehiculo_id = (int)$data['vehiculo_id'];
+$cliente_id = (int)$data['cliente_id'];
+$fecha_inicio = $data['fecha_inicio'];
+$fecha_fin = $data['fecha_fin'];
 
-$conexion->query($sql);
+$stmtCheck = $conexion->prepare("SELECT estado FROM vehiculos WHERE id = ?");
+$stmtCheck->bind_param("i", $vehiculo_id);
+$stmtCheck->execute();
+$result = $stmtCheck->get_result();
+$fila = $result->fetch_assoc();
+$stmtCheck->close();
 
-// actualizar estado
-$conexion->query("UPDATE vehiculos SET estado='ALQUILADO' WHERE id=$vehiculo_id");
+if (!$fila) {
+    echo "El vehículo solicitado no existe";
+    exit;
+}
+
+if ($fila['estado'] !== 'DISPONIBLE') {
+    echo "El vehículo no se encuentra disponible";
+    exit;
+}
+
+$stmtIns = $conexion->prepare("INSERT INTO reservas (vehiculo_id, cliente_id, fecha_inicio, fecha_fin) VALUES (?, ?, ?, ?)");
+$stmtIns->bind_param("iiss", $vehiculo_id, $cliente_id, $fecha_inicio, $fecha_fin);
+$stmtIns->execute();
+$stmtIns->close();
+
+$stmtUpd = $conexion->prepare("UPDATE vehiculos SET estado = 'ALQUILADO' WHERE id = ?");
+$stmtUpd->bind_param("i", $vehiculo_id);
+$stmtUpd->execute();
+$stmtUpd->close();
 
 echo "ok";
 ?>

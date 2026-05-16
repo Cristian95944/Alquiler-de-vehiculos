@@ -2,40 +2,59 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Alquiler de Vehículos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Alquiler Elite</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Gestor de Alquiler</h1>
+<header>
+    <h1>Sistema de Alquiler de Vehículos</h1>
+</header>
 
-<h2>Registrar Vehículo</h2>
-<input id="marca" placeholder="Marca">
-<input id="modelo" placeholder="Modelo">
-<input id="anio" placeholder="Año">
-<input id="categoria" placeholder="Categoría">
-<button onclick="guardar()">Guardar</button>
+<main class="container">
+    <section class="card">
+        <h2>Registrar Vehículo</h2>
+        <div class="form-group">
+            <input id="marca" placeholder="Marca">
+            <input id="modelo" placeholder="Modelo">
+            <input id="anio" type="number" placeholder="Año">
+            <input id="categoria" placeholder="Categoría">
+            <button class="btn-save" onclick="guardar()">Guardar Vehículo</button>
+        </div>
+        <ul id="lista" class="data-list"></ul>
+    </section>
 
-<ul id="lista"></ul>
+    <section class="card">
+        <h2>Registrar Cliente</h2>
+        <div class="form-group">
+            <input id="nombre" placeholder="Nombre Completo">
+            <input id="telefono" placeholder="Teléfono">
+            <input id="licencia" placeholder="Núm. Licencia">
+            <button class="btn-save" onclick="guardarCliente()">Guardar Cliente</button>
+        </div>
+        <ul id="listaClientes" class="data-list"></ul>
+    </section>
 
-<h2>Registrar Cliente</h2>
-<input id="nombre" placeholder="Nombre">
-<input id="telefono" placeholder="Teléfono">
-<input id="licencia" placeholder="Licencia">
-<button onclick="guardarCliente()">Guardar Cliente</button>
-
-<ul id="listaClientes"></ul>
-
-<h2>Crear Reserva</h2>
-<input id="vehiculo_id" placeholder="ID Vehículo">
-<input id="cliente_id" placeholder="ID Cliente">
-<input type="date" id="fecha_inicio">
-<input type="date" id="fecha_fin">
-<button onclick="crearReserva()">Reservar</button>
-
-<ul id="listaReservas"></ul>
+    <section class="card full-width">
+        <h2>Crear Nueva Reserva</h2>
+        <div class="form-group row">
+            <input id="vehiculo_id" type="number" placeholder="ID Vehículo">
+            <input id="cliente_id" type="number" placeholder="ID Cliente">
+            <div class="date-group">
+                <label>Desde:</label>
+                <input type="date" id="fecha_inicio">
+            </div>
+            <div class="date-group">
+                <label>Hasta:</label>
+                <input type="date" id="fecha_fin">
+            </div>
+            <button class="btn-reserve" onclick="crearReserva()">Confirmar Reserva</button>
+        </div>
+        <ul id="listaReservas" class="data-list grid-list"></ul>
+    </section>
+</main>
 
 <script src="app.js"></script>
-
 </body>
 </html>
